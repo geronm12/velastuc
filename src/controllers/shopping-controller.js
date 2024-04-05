@@ -1,5 +1,5 @@
-const ShoppingCart = require("../models/ShoppingCart");
-const Product = require("../models/Product"); // Ensure this is added for product validation
+const ShoppingCart = require("../models/shopping-cart");
+const Product = require("../models/product"); // Ensure this is added for product validation
 
 async function createCart(userId) {
   try {
@@ -11,7 +11,8 @@ async function createCart(userId) {
   }
 }
 
-async function addProduct(cartId, productId, quantity) {
+async function addProduct(req, res) {
+  const { cartId, productId, quantity } = req.body;
   try {
     // First, validate the product exists
     const product = await Product.findById(productId);
@@ -38,7 +39,8 @@ async function addProduct(cartId, productId, quantity) {
   }
 }
 
-async function removeProduct(cartId, productId, quantity) {
+async function removeProduct(req, res) {
+  const { cartId, productId, quantity } = req;
   try {
     const cart = await ShoppingCart.findById(cartId);
     if (!cart || cart.state !== "active") {
@@ -66,7 +68,8 @@ async function removeProduct(cartId, productId, quantity) {
   }
 }
 
-async function getActiveCart(userId) {
+async function getActiveCart(req, res) {
+  const { userId } = req.params;
   try {
     const cart = await ShoppingCart.findOne({ userId, state: "active" });
     if (!cart) {
@@ -78,7 +81,9 @@ async function getActiveCart(userId) {
   }
 }
 
-async function changeCartState(cartId, newState) {
+async function changeCartState(req, res) {
+  const { cartId } = req.params;
+  const { newState } = req;
   try {
     const updatedCart = await ShoppingCart.findByIdAndUpdate(
       cartId,
