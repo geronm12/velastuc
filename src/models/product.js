@@ -10,7 +10,6 @@ const productSchema = new mongoose.Schema({
   price: {
     type: Number,
     required: true,
-    set: (v) => parseFloat(v.replace(",", ".")),
   },
 });
 
